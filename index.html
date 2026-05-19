@@ -1,972 +1,300 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>HireRadar — India Job Search</title>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=DM+Mono:wght@400;500&family=Outfit:wght@300;400;500;600&display=swap" rel="stylesheet">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+<title>HireView - Live Job Search</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
-:root {
-  --bg: #0a0c10;
-  --surface: #111318;
-  --surface2: #181c24;
-  --border: rgba(255,255,255,0.07);
-  --border2: rgba(255,255,255,0.13);
-  --accent: #4f8ef7;
-  --accent2: #7c5cfc;
-  --green: #22d3a0;
-  --amber: #f59e42;
-  --red: #f87171;
-  --text: #f0f2f7;
-  --muted: #7c8296;
-  --muted2: #4e5466;
-  --radius: 12px;
-  --radius-sm: 8px;
-}
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-body {
-  font-family: 'Outfit', sans-serif;
-  background: var(--bg);
-  color: var(--text);
-  min-height: 100vh;
-  font-size: 15px;
+
+body{
+    margin:0;
+    font-family:'Outfit',sans-serif;
+    background:#0b0f19;
+    color:white;
 }
 
-/* NAV */
-nav {
-  position: sticky; top: 0; z-index: 100;
-  display: flex; align-items: center; gap: 0;
-  background: rgba(10,12,16,0.92);
-  backdrop-filter: blur(16px);
-  border-bottom: 0.5px solid var(--border2);
-  padding: 0 2rem;
-  height: 58px;
-}
-.logo {
-  font-family: 'DM Serif Display', serif;
-  font-size: 22px;
-  color: var(--text);
-  letter-spacing: -0.5px;
-  margin-right: auto;
-}
-.logo span { color: var(--accent); }
-.nav-tabs { display: flex; gap: 4px; }
-.nav-tab {
-  padding: 7px 18px;
-  border-radius: var(--radius-sm);
-  cursor: pointer;
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--muted);
-  border: none; background: none;
-  transition: all 0.18s;
-}
-.nav-tab:hover { color: var(--text); background: var(--surface); }
-.nav-tab.active { color: var(--text); background: var(--surface2); border: 0.5px solid var(--border2); }
-.api-key-area { display: flex; align-items: center; gap: 8px; margin-left: 16px; }
-.api-key-area input {
-  background: var(--surface);
-  border: 0.5px solid var(--border2);
-  border-radius: var(--radius-sm);
-  color: var(--text);
-  font-family: 'DM Mono', monospace;
-  font-size: 12px;
-  padding: 6px 12px;
-  width: 200px;
-}
-.api-key-area input::placeholder { color: var(--muted2); }
-.api-key-area input:focus { outline: none; border-color: var(--accent); }
-
-/* PAGES */
-.page { display: none; padding: 2rem 2rem 4rem; max-width: 1100px; margin: 0 auto; }
-.page.active { display: block; }
-
-/* HERO */
-.hero {
-  text-align: center;
-  padding: 3.5rem 1rem 2.5rem;
-}
-.hero h1 {
-  font-family: 'DM Serif Display', serif;
-  font-size: clamp(2rem, 5vw, 3.4rem);
-  line-height: 1.15;
-  letter-spacing: -1px;
-  color: var(--text);
-  margin-bottom: 12px;
-}
-.hero h1 em { font-style: italic; color: var(--accent); }
-.hero p { color: var(--muted); font-size: 16px; font-weight: 300; max-width: 520px; margin: 0 auto 2rem; }
-
-/* SEARCH FORM */
-.search-card {
-  background: var(--surface);
-  border: 0.5px solid var(--border2);
-  border-radius: var(--radius);
-  padding: 1.75rem;
-  margin-bottom: 2rem;
-}
-.form-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 14px;
-  margin-bottom: 16px;
-}
-.form-group { display: flex; flex-direction: column; gap: 6px; }
-.form-group label { font-size: 12px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
-.form-group input, .form-group select, .form-group textarea {
-  background: var(--surface2);
-  border: 0.5px solid var(--border);
-  border-radius: var(--radius-sm);
-  color: var(--text);
-  font-family: 'Outfit', sans-serif;
-  font-size: 14px;
-  padding: 10px 14px;
-  transition: border-color 0.18s;
-  width: 100%;
-}
-.form-group input:focus, .form-group select:focus, .form-group textarea:focus {
-  outline: none; border-color: var(--accent);
-}
-.form-group input::placeholder, .form-group textarea::placeholder { color: var(--muted2); }
-.form-group select option { background: var(--surface2); }
-.form-row { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 16px; }
-.btn-primary {
-  background: var(--accent);
-  color: #fff;
-  border: none;
-  border-radius: var(--radius-sm);
-  padding: 11px 28px;
-  font-family: 'Outfit', sans-serif;
-  font-size: 15px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: opacity 0.18s, transform 0.12s;
-  display: inline-flex; align-items: center; gap: 8px;
-}
-.btn-primary:hover { opacity: 0.88; }
-.btn-primary:active { transform: scale(0.98); }
-.btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
-.btn-secondary {
-  background: transparent;
-  color: var(--muted);
-  border: 0.5px solid var(--border2);
-  border-radius: var(--radius-sm);
-  padding: 11px 22px;
-  font-family: 'Outfit', sans-serif;
-  font-size: 14px;
-  cursor: pointer;
-  transition: all 0.18s;
-}
-.btn-secondary:hover { color: var(--text); border-color: var(--border2); background: var(--surface2); }
-
-/* RESULTS */
-.results-header {
-  display: flex; align-items: center; justify-content: space-between;
-  margin-bottom: 1.25rem;
-}
-.results-count { font-size: 14px; color: var(--muted); }
-.results-count strong { color: var(--text); }
-
-.job-card {
-  background: var(--surface);
-  border: 0.5px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.4rem 1.6rem;
-  margin-bottom: 14px;
-  transition: border-color 0.18s, transform 0.12s;
-  position: relative;
-  overflow: hidden;
-}
-.job-card::before {
-  content: '';
-  position: absolute; left: 0; top: 0; bottom: 0;
-  width: 3px;
-  background: var(--accent);
-  border-radius: 2px 0 0 2px;
-  opacity: 0;
-  transition: opacity 0.18s;
-}
-.job-card:hover { border-color: var(--border2); transform: translateY(-1px); }
-.job-card:hover::before { opacity: 1; }
-
-.job-card-header { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
-.job-title { font-size: 17px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
-.job-company { font-size: 14px; color: var(--accent); font-weight: 500; }
-.job-badges { display: flex; flex-wrap: wrap; gap: 6px; margin: 10px 0; }
-.badge {
-  font-size: 12px; font-weight: 500;
-  padding: 3px 10px;
-  border-radius: 20px;
-  border: 0.5px solid;
-}
-.badge-loc { color: #7ecdf0; border-color: rgba(126,205,240,0.25); background: rgba(126,205,240,0.07); }
-.badge-exp { color: var(--amber); border-color: rgba(245,158,66,0.25); background: rgba(245,158,66,0.07); }
-.badge-type { color: var(--green); border-color: rgba(34,211,160,0.25); background: rgba(34,211,160,0.07); }
-.badge-gcc { color: #c084fc; border-color: rgba(192,132,252,0.25); background: rgba(192,132,252,0.07); }
-.badge-product { color: #fb923c; border-color: rgba(251,146,60,0.25); background: rgba(251,146,60,0.07); }
-.badge-new { color: var(--green); border-color: rgba(34,211,160,0.35); background: rgba(34,211,160,0.1); }
-
-.job-jd { font-size: 14px; color: var(--muted); line-height: 1.65; margin-bottom: 12px; }
-.job-meta { font-size: 13px; color: var(--muted2); display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 14px; }
-.job-meta span { display: flex; align-items: center; gap: 4px; }
-
-.job-actions { display: flex; gap: 10px; align-items: center; flex-wrap: wrap; }
-.btn-apply {
-  background: var(--accent);
-  color: #fff;
-  border: none;
-  border-radius: var(--radius-sm);
-  padding: 8px 20px;
-  font-family: 'Outfit', sans-serif;
-  font-size: 14px; font-weight: 600;
-  cursor: pointer;
-  text-decoration: none;
-  display: inline-flex; align-items: center; gap: 6px;
-  transition: opacity 0.18s;
-}
-.btn-apply:hover { opacity: 0.85; }
-.btn-find-hr {
-  background: transparent;
-  color: #c084fc;
-  border: 0.5px solid rgba(192,132,252,0.35);
-  border-radius: var(--radius-sm);
-  padding: 8px 16px;
-  font-family: 'Outfit', sans-serif;
-  font-size: 13px; font-weight: 500;
-  cursor: pointer;
-  transition: all 0.18s;
-}
-.btn-find-hr:hover { background: rgba(192,132,252,0.1); }
-.btn-details {
-  background: transparent;
-  color: var(--muted);
-  border: 0.5px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 8px 14px;
-  font-family: 'Outfit', sans-serif;
-  font-size: 13px;
-  cursor: pointer;
-  transition: all 0.18s;
-}
-.btn-details:hover { color: var(--text); border-color: var(--border2); }
-
-/* HR FINDER */
-.hr-search-card {
-  background: var(--surface);
-  border: 0.5px solid var(--border2);
-  border-radius: var(--radius);
-  padding: 1.75rem;
-  margin-bottom: 2rem;
-}
-.hr-card {
-  background: var(--surface);
-  border: 0.5px solid var(--border);
-  border-radius: var(--radius);
-  padding: 1.4rem 1.6rem;
-  margin-bottom: 14px;
-  display: flex; gap: 1.25rem; align-items: flex-start;
-  transition: border-color 0.18s;
-}
-.hr-card:hover { border-color: var(--border2); }
-.hr-avatar {
-  width: 52px; height: 52px; min-width: 52px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, #7c5cfc, #4f8ef7);
-  display: flex; align-items: center; justify-content: center;
-  font-size: 19px; font-weight: 600; color: #fff;
-  font-family: 'DM Serif Display', serif;
-}
-.hr-info { flex: 1; }
-.hr-name { font-size: 16px; font-weight: 600; margin-bottom: 2px; }
-.hr-role { font-size: 13px; color: var(--muted); margin-bottom: 8px; }
-.hr-contacts { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 10px; }
-.hr-contact-pill {
-  font-size: 12px;
-  padding: 4px 12px;
-  border-radius: 20px;
-  border: 0.5px solid var(--border2);
-  color: var(--muted);
-  display: flex; align-items: center; gap: 5px;
-  cursor: pointer;
-  transition: all 0.18s;
-  text-decoration: none;
-}
-.hr-contact-pill:hover { color: var(--text); border-color: var(--border); background: var(--surface2); }
-.hr-contact-pill.li { color: #60a5fa; border-color: rgba(96,165,250,0.3); }
-.hr-contact-pill.mail { color: var(--green); border-color: rgba(34,211,160,0.3); }
-.hr-active { font-size: 12px; color: var(--green); display: flex; align-items: center; gap: 5px; }
-.hr-active::before { content: ''; display: inline-block; width: 6px; height: 6px; border-radius: 50%; background: var(--green); }
-
-/* LOADING */
-.loading-state {
-  text-align: center;
-  padding: 3rem 1rem;
-}
-.spinner {
-  width: 36px; height: 36px;
-  border: 2.5px solid var(--border2);
-  border-top-color: var(--accent);
-  border-radius: 50%;
-  animation: spin 0.8s linear infinite;
-  margin: 0 auto 16px;
-}
-@keyframes spin { to { transform: rotate(360deg); } }
-.loading-state p { color: var(--muted); font-size: 14px; }
-
-/* EMPTY STATE */
-.empty-state {
-  text-align: center;
-  padding: 3rem 1rem;
-  color: var(--muted);
-}
-.empty-icon { font-size: 42px; margin-bottom: 12px; opacity: 0.4; }
-.empty-state h3 { color: var(--text); margin-bottom: 6px; }
-
-/* DETAIL MODAL */
-.modal-overlay {
-  display: none;
-  position: fixed; inset: 0; z-index: 200;
-  background: rgba(0,0,0,0.72);
-  backdrop-filter: blur(8px);
-  align-items: center; justify-content: center;
-  padding: 1.5rem;
-}
-.modal-overlay.open { display: flex; }
-.modal {
-  background: var(--surface);
-  border: 0.5px solid var(--border2);
-  border-radius: 16px;
-  max-width: 680px; width: 100%;
-  max-height: 85vh; overflow-y: auto;
-  padding: 2rem;
-}
-.modal-header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; }
-.modal-close {
-  background: var(--surface2);
-  border: 0.5px solid var(--border2);
-  border-radius: var(--radius-sm);
-  color: var(--muted);
-  width: 32px; height: 32px;
-  cursor: pointer;
-  font-size: 18px;
-  display: flex; align-items: center; justify-content: center;
-  transition: color 0.18s;
-}
-.modal-close:hover { color: var(--text); }
-.modal-section { margin-bottom: 1.5rem; }
-.modal-section h4 { font-size: 12px; font-weight: 500; color: var(--muted); text-transform: uppercase; letter-spacing: 0.07em; margin-bottom: 8px; }
-.modal-section p, .modal-section ul { font-size: 14px; color: var(--muted); line-height: 1.7; }
-.modal-section ul { padding-left: 1.2rem; }
-.modal-section li { margin-bottom: 4px; }
-
-/* TIPS */
-.info-banner {
-  background: rgba(79,142,247,0.08);
-  border: 0.5px solid rgba(79,142,247,0.25);
-  border-radius: var(--radius-sm);
-  padding: 10px 16px;
-  font-size: 13px;
-  color: rgba(79,142,247,0.9);
-  margin-bottom: 1.25rem;
-  display: flex; align-items: center; gap: 8px;
+.container{
+    max-width:1200px;
+    margin:auto;
+    padding:40px 20px;
 }
 
-/* STREAM OUTPUT */
-.stream-output {
-  background: var(--surface2);
-  border: 0.5px solid var(--border);
-  border-radius: var(--radius-sm);
-  padding: 1rem 1.25rem;
-  font-family: 'DM Mono', monospace;
-  font-size: 12.5px;
-  color: var(--muted);
-  min-height: 60px;
-  max-height: 280px;
-  overflow-y: auto;
-  white-space: pre-wrap;
-  word-break: break-word;
-  margin-bottom: 1.25rem;
-  display: none;
-}
-.stream-output.visible { display: block; }
-
-/* scrollbar */
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--muted2); border-radius: 4px; }
-
-/* DISCLAIMER */
-.disclaimer {
-  background: rgba(245,158,66,0.07);
-  border: 0.5px solid rgba(245,158,66,0.25);
-  border-radius: var(--radius-sm);
-  padding: 10px 16px;
-  font-size: 12.5px;
-  color: rgba(245,158,66,0.85);
-  margin-bottom: 1.25rem;
+h1{
+    text-align:center;
+    font-size:52px;
+    margin-bottom:10px;
 }
 
-/* FOOTER */
-footer {
-  text-align: center;
-  padding: 2rem;
-  color: var(--muted2);
-  font-size: 13px;
-  border-top: 0.5px solid var(--border);
-  margin-top: 3rem;
+.highlight{
+    color:#4f8ef7;
 }
-footer a { color: var(--muted); text-decoration: none; }
-footer a:hover { color: var(--text); }
+
+.subtitle{
+    text-align:center;
+    color:#a0a0a0;
+    margin-bottom:50px;
+}
+
+.search-box{
+    background:#121826;
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:20px;
+    padding:25px;
+}
+
+.grid{
+    display:grid;
+    grid-template-columns:1fr 1fr 1fr;
+    gap:15px;
+}
+
+input,select{
+    background:#1b2335;
+    border:none;
+    color:white;
+    padding:14px;
+    border-radius:12px;
+    font-size:15px;
+    width:100%;
+}
+
+button{
+    background:#4f8ef7;
+    color:white;
+    border:none;
+    padding:14px 28px;
+    border-radius:12px;
+    cursor:pointer;
+    font-size:16px;
+    font-weight:600;
+    margin-top:20px;
+}
+
+button:hover{
+    opacity:0.9;
+}
+
+.results{
+    margin-top:40px;
+}
+
+.job-card{
+    background:#121826;
+    border-radius:20px;
+    padding:25px;
+    margin-bottom:20px;
+    border:1px solid rgba(255,255,255,0.08);
+}
+
+.job-title{
+    font-size:24px;
+    font-weight:700;
+}
+
+.company{
+    color:#4f8ef7;
+    margin-top:5px;
+}
+
+.meta{
+    margin-top:15px;
+    display:flex;
+    gap:10px;
+    flex-wrap:wrap;
+}
+
+.badge{
+    background:#1b2335;
+    padding:8px 12px;
+    border-radius:30px;
+    font-size:13px;
+}
+
+.description{
+    margin-top:20px;
+    color:#cfcfcf;
+    line-height:1.7;
+}
+
+.apply-btn{
+    display:inline-block;
+    margin-top:20px;
+    background:#4f8ef7;
+    color:white;
+    padding:12px 20px;
+    border-radius:12px;
+    text-decoration:none;
+}
+
+.loading{
+    text-align:center;
+    margin-top:40px;
+    color:#999;
+}
+
 </style>
 </head>
+
 <body>
 
-<nav>
-  <div class="logo">Hire<span>View</span></div>
-  <div class="nav-tabs">
-    <button class="nav-tab active" onclick="showPage('jobs')">🔍 Job Search</button>
-    <button class="nav-tab" onclick="showPage('hr')">👤 HR Finder</button>
-  </div>
-  <div class="api-key-area">
-    <input type="password" id="apiKeyInput" placeholder="sk-ant-... (Anthropic API Key)" />
-    <button class="btn-secondary" onclick="saveKey()" style="padding:6px 14px;font-size:13px;">Save</button>
-  </div>
-</nav>
+<div class="container">
 
-<!-- JOB SEARCH PAGE -->
-<div class="page active" id="page-jobs">
-  <div class="hero">
-    <h1>Find Jobs at <em>Product</em> Companies & GCCs in India</h1>
-    <p>AI-powered real-time search across the web — with direct apply links, JDs, and hiring manager details.</p>
-  </div>
+<h1>Hire<span class="highlight">View</span></h1>
 
-  <div class="search-card">
-    <div class="info-banner">
-      ℹ️ Enter your Anthropic API key in the top right. This tool uses Claude + web search to find live job listings.
-    </div>
-    <div class="form-grid">
-      <div class="form-group">
-        <label>Job Role / Title</label>
-        <input type="text" id="jobRole" placeholder="e.g. Software Engineer, Data Analyst" />
-      </div>
-      <div class="form-group">
-        <label>Skills / Technologies</label>
-        <input type="text" id="skills" placeholder="e.g. Python, React, AWS, SQL" />
-      </div>
-      <div class="form-group">
-        <label>Location</label>
-        <input type="text" id="location" placeholder="e.g. Bangalore, Hyderabad, Remote" />
-      </div>
-    </div>
-    <div class="form-row">
-      <div class="form-group">
-        <label>Experience (Years)</label>
-        <select id="experience">
-          <option value="0-1">0–1 years (Fresher)</option>
-          <option value="1-3">1–3 years</option>
-          <option value="3-5" selected>3–5 years</option>
-          <option value="5-8">5–8 years</option>
-          <option value="8-12">8–12 years</option>
-          <option value="12+">12+ years (Senior)</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Company Type</label>
-        <select id="companyType">
-          <option value="both" selected>Both (Product + GCC)</option>
-          <option value="product">Product-Based Only</option>
-          <option value="gcc">GCC / MNC Only</option>
-          <option value="startup">Startups</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Job Type</label>
-        <select id="jobType">
-          <option value="fulltime" selected>Full Time</option>
-          <option value="remote">Remote</option>
-          <option value="hybrid">Hybrid</option>
-          <option value="contract">Contract</option>
-        </select>
-      </div>
-    </div>
-    <div class="form-group" style="margin-bottom:16px;">
-      <label>Additional Requirements (optional)</label>
-      <textarea id="additionalReq" rows="2" placeholder="e.g. FAANG-level compensation, specific domain like fintech, no bond, etc."></textarea>
-    </div>
-    <div style="display:flex;gap:10px;align-items:center;">
-      <button class="btn-primary" onclick="searchJobs()" id="searchBtn">
-        <span>🔍</span> Search Jobs
-      </button>
-      <button class="btn-secondary" onclick="clearResults()">Clear</button>
-      <span id="searchStatus" style="font-size:13px;color:var(--muted);"></span>
-    </div>
-  </div>
+<p class="subtitle">
+Find real-time jobs from Product Companies & GCCs
+</p>
 
-  <div id="streamOutput" class="stream-output"></div>
-  <div id="jobResults"></div>
+<div class="search-box">
+
+<div class="grid">
+
+<input type="text" id="role" placeholder="Job Role">
+<input type="text" id="skills" placeholder="Skills">
+<input type="text" id="location" placeholder="Location">
+
 </div>
 
-<!-- HR FINDER PAGE -->
-<div class="page" id="page-hr">
-  <div class="hero">
-    <h1>Find <em>Real HRs</em> Who Are Actively Hiring</h1>
-    <p>Discover recruiters, talent acquisition specialists, and hiring managers with their LinkedIn, email, and hiring status.</p>
-  </div>
+<button onclick="searchJobs()" id="searchBtn">
+Search Jobs
+</button>
 
-  <div class="hr-search-card">
-    <div class="disclaimer">
-      ⚠️ HR contact details are sourced from public information (LinkedIn, company pages, job post authors). Always reach out professionally. This tool does not scrape private data.
-    </div>
-    <div class="form-grid">
-      <div class="form-group">
-        <label>Target Company / Domain</label>
-        <input type="text" id="hrCompany" placeholder="e.g. Google, Flipkart, fintech GCC" />
-      </div>
-      <div class="form-group">
-        <label>Hiring For Role</label>
-        <input type="text" id="hrRole" placeholder="e.g. Backend Engineer, Data Scientist" />
-      </div>
-      <div class="form-group">
-        <label>Location</label>
-        <input type="text" id="hrLocation" placeholder="e.g. Bangalore, Pune" />
-      </div>
-    </div>
-    <div style="display:flex;gap:10px;align-items:center;margin-top:4px;">
-      <button class="btn-primary" onclick="searchHRs()" id="hrSearchBtn">
-        <span>👤</span> Find HRs
-      </button>
-      <button class="btn-secondary" onclick="clearHRResults()">Clear</button>
-      <span id="hrSearchStatus" style="font-size:13px;color:var(--muted);"></span>
-    </div>
-  </div>
-
-  <div id="hrStreamOutput" class="stream-output"></div>
-  <div id="hrResults"></div>
 </div>
 
-<!-- JOB DETAIL MODAL -->
-<div class="modal-overlay" id="jobModal">
-  <div class="modal">
-    <div class="modal-header">
-      <div>
-        <div class="job-title" id="modalTitle"></div>
-        <div class="job-company" id="modalCompany"></div>
-      </div>
-      <button class="modal-close" onclick="closeModal()">✕</button>
-    </div>
-    <div id="modalContent"></div>
-    <div style="display:flex;gap:10px;margin-top:1.5rem;">
-      <a id="modalApplyBtn" href="#" target="_blank" rel="noopener" class="btn-apply">Apply Now ↗</a>
-      <button class="btn-find-hr" onclick="findHRFromModal()">Find HR for this Company</button>
-    </div>
-  </div>
-</div>
+<div class="results" id="results"></div>
 
-<footer>
-  HireRadar — Built for job seekers targeting India's product & GCC ecosystem &nbsp;·&nbsp;
-  Powered by <a href="https://anthropic.com" target="_blank">Claude AI</a> &nbsp;·&nbsp;
-  <a href="https://github.com" target="_blank">View on GitHub</a>
-</footer>
+</div>
 
 <script>
-const API_URL = 'https://api.anthropic.com/v1/messages';
-let currentJobs = [];
-let currentHRs = [];
-let modalCompanyName = '';
 
-function getKey() {
-  return document.getElementById('apiKeyInput').value.trim() || localStorage.getItem('hr_api_key') || '';
-}
-function saveKey() {
-  const k = document.getElementById('apiKeyInput').value.trim();
-  if (k) { localStorage.setItem('hr_api_key', k); alert('API key saved locally!'); }
-}
-window.onload = () => {
-  const saved = localStorage.getItem('hr_api_key');
-  if (saved) document.getElementById('apiKeyInput').value = saved;
-};
+async function searchJobs(){
 
-function showPage(page) {
-  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
-  document.getElementById('page-' + page).classList.add('active');
-  event.currentTarget.classList.add('active');
-}
+    const role =
+        document.getElementById('role').value;
 
-function showLoading(containerId) {
-  document.getElementById(containerId).innerHTML = `
-    <div class="loading-state">
-      <div class="spinner"></div>
-      <p>Searching the web for live job listings...</p>
-    </div>`;
-}
+    const skills =
+        document.getElementById('skills').value;
 
-function clearResults() {
-  document.getElementById('jobResults').innerHTML = '';
-  document.getElementById('streamOutput').classList.remove('visible');
-  document.getElementById('streamOutput').textContent = '';
-  currentJobs = [];
-}
-function clearHRResults() {
-  document.getElementById('hrResults').innerHTML = '';
-  document.getElementById('hrStreamOutput').classList.remove('visible');
-  document.getElementById('hrStreamOutput').textContent = '';
-  currentHRs = [];
-}
+    const location =
+        document.getElementById('location').value;
 
-async function searchJobs() {
-  const key = getKey();
-  if (!key) { alert('Please enter your Anthropic API key first (top right).'); return; }
+    const results =
+        document.getElementById('results');
 
-  const role = document.getElementById('jobRole').value.trim();
-  const skills = document.getElementById('skills').value.trim();
-  const location = document.getElementById('location').value.trim() || 'India';
-  const exp = document.getElementById('experience').value;
-  const compType = document.getElementById('companyType').value;
-  const jobType = document.getElementById('jobType').value;
-  const extra = document.getElementById('additionalReq').value.trim();
+    const btn =
+        document.getElementById('searchBtn');
 
-  if (!role) { alert('Please enter a job role.'); return; }
-
-  const btn = document.getElementById('searchBtn');
-  btn.disabled = true; btn.textContent = '⏳ Searching...';
-  document.getElementById('searchStatus').textContent = 'Using AI + web search...';
-
-  const streamEl = document.getElementById('streamOutput');
-  streamEl.textContent = '';
-  streamEl.classList.add('visible');
-
-  const compTypeLabel = { both: 'product-based companies and GCCs (Global Capability Centers)', product: 'product-based companies', gcc: 'GCCs and MNCs', startup: 'startups' }[compType];
-
-  const prompt = `You are a job search assistant. Search the internet and find 6-8 REAL, CURRENT job postings in India for the following criteria:
-
-Role: ${role}
-Skills: ${skills || 'Not specified'}
-Location: ${location}
-Experience: ${exp} years
-Company Type: ${compTypeLabel}
-Job Type: ${jobType}
-Additional: ${extra || 'None'}
-
-Search for recent job postings (within last 30 days) on LinkedIn, Naukri, Indeed, company career pages, Glassdoor, and Instahyre.
-
-Return ONLY a valid JSON array. No markdown, no explanation. Each job object must have:
-{
-  "title": "exact job title",
-  "company": "company name",
-  "companyType": "product" or "gcc" or "startup" or "service",
-  "location": "city, state",
-  "experience": "X-Y years",
-  "jobType": "Full Time/Remote/Hybrid/Contract",
-  "salary": "salary range if visible else null",
-  "postedDate": "X days ago or date",
-  "jdSummary": "2-3 sentence summary of what the role involves",
-  "responsibilities": ["item1", "item2", "item3", "item4"],
-  "requirements": ["req1", "req2", "req3", "req4"],
-  "hiringManager": "name if visible else null",
-  "hiringManagerTitle": "title if visible else null",
-  "applyUrl": "direct URL to apply",
-  "sourceUrl": "URL where job was found",
-  "source": "LinkedIn/Naukri/Indeed/Company Site/etc",
-  "skills": ["skill1", "skill2", "skill3"],
-  "isNew": true if posted within 7 days else false
-}`;
-
-  try {
-    const res = await fetch(API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': key,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-3-haiku-20240307',
-        max_tokens: 4000,
-        messages: [{ role: 'user', content: prompt }]
-      })
-    });
-
-    const data = await res.json();
-    streamEl.textContent = 'Processing search results...\n';
-
-    if (data.error) {
-      streamEl.textContent += 'API Error: ' + (data.error.message || JSON.stringify(data.error));
-      btn.disabled = false; btn.innerHTML = '<span>🔍</span> Search Jobs';
-      document.getElementById('searchStatus').textContent = '';
-      return;
+    if(!role){
+        alert('Please enter job role');
+        return;
     }
 
-    let rawText = '';
-    for (const block of (data.content || [])) {
-      if (block.type === 'text') rawText += block.text;
-      else if (block.type === 'mcp_tool_result' || block.type === 'tool_result') {
-        streamEl.textContent += '[Web search complete]\n';
-      }
-    }
+    btn.innerHTML = 'Searching...';
 
-    streamEl.textContent += 'Parsing job data...\n';
-
-    // Extract JSON
-    let jobs = [];
-    try {
-      const jsonMatch = rawText.match(/\[[\s\S]*\]/);
-      if (jsonMatch) jobs = JSON.parse(jsonMatch[0]);
-    } catch(e) {
-      const cleaned = rawText.replace(/```json|```/g, '').trim();
-      try { jobs = JSON.parse(cleaned); } catch(e2) { jobs = []; }
-    }
-
-    currentJobs = jobs;
-    streamEl.textContent += `Found ${jobs.length} job listings.\n`;
-
-    if (jobs.length === 0) {
-      document.getElementById('jobResults').innerHTML = `
-        <div class="empty-state">
-          <div class="empty-icon">🔍</div>
-          <h3>No jobs found</h3>
-          <p>Try different keywords, location, or broaden your filters.</p>
-        </div>`;
-    } else {
-      renderJobs(jobs);
-    }
-  } catch(err) {
-    streamEl.textContent += 'Error: ' + err.message;
-    document.getElementById('jobResults').innerHTML = `<div class="empty-state"><h3>Error occurred</h3><p>${err.message}</p></div>`;
-  }
-
-  btn.disabled = false; btn.innerHTML = '<span>🔍</span> Search Jobs';
-  document.getElementById('searchStatus').textContent = '';
-}
-
-function renderJobs(jobs) {
-  const container = document.getElementById('jobResults');
-  container.innerHTML = `
-    <div class="results-header">
-      <div class="results-count">Found <strong>${jobs.length} jobs</strong> matching your criteria</div>
-    </div>`;
-
-  jobs.forEach((job, i) => {
-    const typeColor = job.companyType === 'gcc' ? 'badge-gcc' : job.companyType === 'product' ? 'badge-product' : 'badge-type';
-    const typeLabel = job.companyType === 'gcc' ? '🏢 GCC' : job.companyType === 'product' ? '⚡ Product' : '🚀 Startup';
-
-    container.innerHTML += `
-      <div class="job-card">
-        <div class="job-card-header">
-          <div>
-            <div class="job-title">${esc(job.title)}</div>
-            <div class="job-company">${esc(job.company)}</div>
-          </div>
-          <div style="text-align:right;flex-shrink:0;">
-            ${job.salary ? `<div style="font-size:13px;color:var(--green);font-weight:600;">${esc(job.salary)}</div>` : ''}
-            <div style="font-size:12px;color:var(--muted2);margin-top:2px;">${esc(job.source || '')}</div>
-          </div>
+    results.innerHTML = `
+        <div class="loading">
+            Fetching live jobs...
         </div>
-        <div class="job-badges">
-          <span class="badge badge-loc">📍 ${esc(job.location || 'India')}</span>
-          <span class="badge badge-exp">💼 ${esc(job.experience || 'Not specified')}</span>
-          <span class="badge badge-type">${esc(job.jobType || 'Full Time')}</span>
-          <span class="badge ${typeColor}">${typeLabel}</span>
-          ${job.isNew ? '<span class="badge badge-new">🆕 New</span>' : ''}
-        </div>
-        <div class="job-jd">${esc(job.jdSummary || 'No description available.')}</div>
-        <div class="job-meta">
-          ${job.postedDate ? `<span>🕐 ${esc(job.postedDate)}</span>` : ''}
-          ${job.hiringManager ? `<span>👤 ${esc(job.hiringManager)}${job.hiringManagerTitle ? ' · ' + esc(job.hiringManagerTitle) : ''}</span>` : ''}
-          ${job.skills && job.skills.length ? `<span>🛠 ${job.skills.slice(0,4).map(s=>esc(s)).join(' · ')}</span>` : ''}
-        </div>
-        <div class="job-actions">
-          <a href="${esc(job.applyUrl || job.sourceUrl || '#')}" target="_blank" rel="noopener" class="btn-apply">Apply Now ↗</a>
-          <button class="btn-details" onclick='openJobModal(${i})'>View Full JD</button>
-          <button class="btn-find-hr" onclick='findHRForJob("${esc(job.company)}", "${esc(job.title)}")'>Find HR 👤</button>
-          ${job.sourceUrl ? `<a href="${esc(job.sourceUrl)}" target="_blank" rel="noopener" style="font-size:12px;color:var(--muted2);text-decoration:none;">Source ↗</a>` : ''}
-        </div>
-      </div>`;
-  });
-}
+    `;
 
-function openJobModal(i) {
-  const job = currentJobs[i];
-  if (!job) return;
-  document.getElementById('modalTitle').textContent = job.title;
-  document.getElementById('modalCompany').textContent = job.company;
-  modalCompanyName = job.company;
+    try{
 
-  let html = '';
-  if (job.responsibilities && job.responsibilities.length) {
-    html += `<div class="modal-section"><h4>Responsibilities</h4><ul>${job.responsibilities.map(r=>`<li>${esc(r)}</li>`).join('')}</ul></div>`;
-  }
-  if (job.requirements && job.requirements.length) {
-    html += `<div class="modal-section"><h4>Requirements</h4><ul>${job.requirements.map(r=>`<li>${esc(r)}</li>`).join('')}</ul></div>`;
-  }
-  if (job.hiringManager) {
-    html += `<div class="modal-section"><h4>Hiring Manager</h4><p>${esc(job.hiringManager)}${job.hiringManagerTitle ? ' — ' + esc(job.hiringManagerTitle) : ''}</p></div>`;
-  }
-  if (job.salary) {
-    html += `<div class="modal-section"><h4>Salary</h4><p>${esc(job.salary)}</p></div>`;
-  }
-  html += `<div class="modal-section"><h4>Source</h4><p>${esc(job.source || 'Unknown')} ${job.sourceUrl ? `· <a href="${esc(job.sourceUrl)}" target="_blank" style="color:var(--accent);">View Original ↗</a>` : ''}</p></div>`;
+        const query =
+            `${role} ${skills} ${location}`;
 
-  document.getElementById('modalContent').innerHTML = html;
-  document.getElementById('modalApplyBtn').href = job.applyUrl || job.sourceUrl || '#';
-  document.getElementById('jobModal').classList.add('open');
-}
-function closeModal() { document.getElementById('jobModal').classList.remove('open'); }
-document.getElementById('jobModal').addEventListener('click', e => { if (e.target === document.getElementById('jobModal')) closeModal(); });
+        const response =
+            await fetch(`/api/jobs?q=${encodeURIComponent(query)}`);
 
-function findHRFromModal() {
-  closeModal();
-  showPage('hr');
-  document.getElementById('hrCompany').value = modalCompanyName;
-  document.querySelectorAll('.nav-tab')[1].click();
-}
+        const data =
+            await response.json();
 
-function findHRForJob(company, role) {
-  document.getElementById('hrCompany').value = company;
-  document.getElementById('hrRole').value = role;
-  showPage('hr');
-  document.querySelectorAll('.nav-tab')[1].classList.add('active');
-  document.querySelectorAll('.nav-tab')[0].classList.remove('active');
-}
+        console.log(data);
 
-async function searchHRs() {
-  const key = getKey();
-  if (!key) { alert('Please enter your Anthropic API key first.'); return; }
+        const jobs =
+            data.data || [];
 
-  const company = document.getElementById('hrCompany').value.trim();
-  const role = document.getElementById('hrRole').value.trim();
-  const loc = document.getElementById('hrLocation').value.trim() || 'India';
+        if(jobs.length === 0){
 
-  if (!company && !role) { alert('Please enter a company or role to search HRs.'); return; }
+            results.innerHTML = `
+                <div class="loading">
+                    No jobs found.
+                </div>
+            `;
 
-  const btn = document.getElementById('hrSearchBtn');
-  btn.disabled = true; btn.textContent = '⏳ Searching...';
+            btn.innerHTML = 'Search Jobs';
 
-  const streamEl = document.getElementById('hrStreamOutput');
-  streamEl.textContent = '';
-  streamEl.classList.add('visible');
+            return;
+        }
 
-  const prompt = `You are a talent research assistant. Search LinkedIn, company career pages, and professional networks to find REAL HR professionals, recruiters, and talent acquisition specialists who are actively hiring at ${company || 'tech companies'} in India${role ? ' for roles similar to ' + role : ''} in ${loc}.
+        results.innerHTML = '';
 
-Find 5-8 real people. Return ONLY a valid JSON array. No markdown, no preamble. Each object:
-{
-  "name": "full name",
-  "title": "HR/TA/Recruiter title",
-  "company": "company name",
-  "location": "city",
-  "linkedinUrl": "https://linkedin.com/in/... if found else null",
-  "email": "professional email if publicly listed else null",
-  "emailPattern": "guessed pattern like firstname.lastname@company.com",
-  "activelyHiring": true or false based on recent posts/activity,
-  "recentPost": "brief summary of their recent LinkedIn hiring post if found else null",
-  "hiringFor": ["role1", "role2"],
-  "initials": "first two letters of name in caps",
-  "profileNote": "one sentence about their recruiting focus or speciality"
-}`;
+        jobs.forEach(job => {
 
-  try {
-    const res = await fetch(API_URL, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': key,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'claude-3-haiku-20240307',
-        max_tokens: 3000,
-        messages: [{ role: 'user', content: prompt }]
-      })
-    });
+            results.innerHTML += `
 
-    const data = await res.json();
-    streamEl.textContent = 'Searching professional networks...\n';
+            <div class="job-card">
 
-    if (data.error) {
-      streamEl.textContent += 'API Error: ' + (data.error.message || JSON.stringify(data.error));
-      btn.disabled = false; btn.innerHTML = '<span>👤</span> Find HRs';
-      return;
+                <div class="job-title">
+                    ${job.job_title || 'Unknown Role'}
+                </div>
+
+                <div class="company">
+                    ${job.employer_name || 'Unknown Company'}
+                </div>
+
+                <div class="meta">
+
+                    <div class="badge">
+                        📍 ${job.job_city || 'India'}
+                    </div>
+
+                    <div class="badge">
+                        💼 ${job.job_employment_type || 'Full Time'}
+                    </div>
+
+                </div>
+
+                <div class="description">
+                    ${job.job_description
+                        ? job.job_description.substring(0,300)
+                        : 'No description available'}
+                </div>
+
+                <a
+                    class="apply-btn"
+                    href="${job.job_apply_link}"
+                    target="_blank"
+                >
+                    Apply Now
+                </a>
+
+            </div>
+
+            `;
+
+        });
+
+    }catch(error){
+
+        console.error(error);
+
+        results.innerHTML = `
+            <div class="loading">
+                Error loading jobs.
+            </div>
+        `;
+
     }
 
-    let rawText = '';
-    for (const block of (data.content || [])) {
-      if (block.type === 'text') rawText += block.text;
-      else if (block.type === 'mcp_tool_result' || block.type === 'tool_result') {
-        streamEl.textContent += '[Search complete]\n';
-      }
-    }
+    btn.innerHTML = 'Search Jobs';
 
-    streamEl.textContent += 'Parsing HR profiles...\n';
-
-    let hrs = [];
-    try {
-      const jsonMatch = rawText.match(/\[[\s\S]*\]/);
-      if (jsonMatch) hrs = JSON.parse(jsonMatch[0]);
-    } catch(e) {
-      const cleaned = rawText.replace(/```json|```/g, '').trim();
-      try { hrs = JSON.parse(cleaned); } catch(e2) { hrs = []; }
-    }
-
-    currentHRs = hrs;
-    streamEl.textContent += `Found ${hrs.length} HR profiles.\n`;
-
-    if (hrs.length === 0) {
-      document.getElementById('hrResults').innerHTML = `
-        <div class="empty-state">
-          <div class="empty-icon">👤</div>
-          <h3>No HR profiles found</h3>
-          <p>Try a different company name or broaden your search.</p>
-        </div>`;
-    } else {
-      renderHRs(hrs);
-    }
-  } catch(err) {
-    streamEl.textContent += 'Error: ' + err.message;
-  }
-
-  btn.disabled = false; btn.innerHTML = '<span>👤</span> Find HRs';
-  document.getElementById('hrSearchStatus').textContent = '';
 }
 
-function renderHRs(hrs) {
-  const container = document.getElementById('hrResults');
-  container.innerHTML = `
-    <div class="results-header">
-      <div class="results-count">Found <strong>${hrs.length} HR profiles</strong></div>
-      <div style="font-size:12px;color:var(--muted2);">Public info only · Always outreach professionally</div>
-    </div>`;
-
-  hrs.forEach(hr => {
-    const initials = (hr.initials || hr.name?.substring(0,2) || 'HR').toUpperCase();
-    container.innerHTML += `
-      <div class="hr-card">
-        <div class="hr-avatar">${esc(initials)}</div>
-        <div class="hr-info">
-          <div class="hr-name">${esc(hr.name || 'Unknown')}</div>
-          <div class="hr-role">${esc(hr.title || 'Recruiter')} · ${esc(hr.company || '')} · ${esc(hr.location || 'India')}</div>
-          ${hr.profileNote ? `<div style="font-size:13px;color:var(--muted);margin-bottom:8px;">${esc(hr.profileNote)}</div>` : ''}
-          <div class="hr-contacts">
-            ${hr.linkedinUrl ? `<a href="${esc(hr.linkedinUrl)}" target="_blank" rel="noopener" class="hr-contact-pill li">🔗 LinkedIn Profile</a>` : ''}
-            ${hr.email ? `<a href="mailto:${esc(hr.email)}" class="hr-contact-pill mail">✉ ${esc(hr.email)}</a>` : ''}
-            ${hr.emailPattern && !hr.email ? `<span class="hr-contact-pill" title="Guessed pattern">📧 ${esc(hr.emailPattern)}</span>` : ''}
-          </div>
-          ${hr.hiringFor && hr.hiringFor.length ? `<div style="font-size:12px;color:var(--muted2);">Hiring for: ${hr.hiringFor.map(r=>esc(r)).join(', ')}</div>` : ''}
-          ${hr.recentPost ? `<div style="font-size:13px;color:var(--muted);margin-top:6px;font-style:italic;">"${esc(hr.recentPost)}"</div>` : ''}
-        </div>
-        <div style="flex-shrink:0;">
-          ${hr.activelyHiring ? `<div class="hr-active">Actively hiring</div>` : `<div style="font-size:12px;color:var(--muted2);">Status unknown</div>`}
-        </div>
-      </div>`;
-  });
-}
-
-function esc(str) {
-  if (!str) return '';
-  return String(str).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
 </script>
+
 </body>
 </html>
