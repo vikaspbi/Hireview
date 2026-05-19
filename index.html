@@ -423,7 +423,7 @@ footer a:hover { color: var(--text); }
 <body>
 
 <nav>
-  <div class="logo">Hire<span>Radar</span></div>
+  <div class="logo">Hire<span>View</span></div>
   <div class="nav-tabs">
     <button class="nav-tab active" onclick="showPage('jobs')">🔍 Job Search</button>
     <button class="nav-tab" onclick="showPage('hr')">👤 HR Finder</button>
@@ -683,7 +683,7 @@ Return ONLY a valid JSON array. No markdown, no explanation. Each job object mus
         'anthropic-dangerous-direct-browser-access': 'true'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-3-5-sonnet-20241022',
         max_tokens: 4000,
         tools: [{ type: 'web_search_20250305', name: 'web_search' }],
         messages: [{ role: 'user', content: prompt }]
@@ -877,7 +877,7 @@ Find 5-8 real people. Return ONLY a valid JSON array. No markdown, no preamble. 
         'anthropic-dangerous-direct-browser-access': 'true'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
+        model: 'claude-3-5-sonnet-20241022',
         max_tokens: 3000,
         tools: [{ type: 'web_search_20250305', name: 'web_search' }],
         messages: [{ role: 'user', content: prompt }]
